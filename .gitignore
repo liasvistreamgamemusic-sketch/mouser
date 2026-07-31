@@ -1,0 +1,4 @@
+build/
+Mouser.app/
+*.zip
+.DS_Store
