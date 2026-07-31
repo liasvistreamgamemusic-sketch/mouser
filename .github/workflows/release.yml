@@ -13,17 +13,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Mouser.app
-        run: ./build.sh "${GITHUB_REF_NAME#v}"
-
-      - name: Zip
-        run: ditto -c -k --keepParent Mouser.app "Mouser-${GITHUB_REF_NAME#v}.zip"
+      - name: Build and package
+        run: ./package.sh "${GITHUB_REF_NAME#v}"
 
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release create "$GITHUB_REF_NAME"
-          "Mouser-${GITHUB_REF_NAME#v}.zip"
-          --title "$GITHUB_REF_NAME"
-          --generate-notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          cat > release-notes.md <<'NOTES'
+          ## インストール
+
+          1. `Mouser-x.y.z.dmg` をダウンロードして開き、`Mouser.app` を `Applications` へドラッグする
+          2. ad-hoc 署名のため初回は Gatekeeper に止められる。ターミナルで
+             `xattr -dr com.apple.quarantine /Applications/Mouser.app`
+             を実行するか、「システム設定 → プライバシーとセキュリティ」下部の「このまま開く」で起動する
+          3. メニューバーのカーソルアイコンから オン/オフ・間隔・移動距離 を設定する
+
+          スリープ・「離席中」抑止まで効かせるにはアクセシビリティ権限が必要 (トグルをオンにするとダイアログが出る)。
+          NOTES
+          gh release create "$GITHUB_REF_NAME" \
+            "Mouser-${VERSION}.dmg" \
+            "Mouser-${VERSION}.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file release-notes.md

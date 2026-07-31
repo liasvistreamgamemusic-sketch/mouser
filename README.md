@@ -15,14 +15,14 @@
 
 ## インストール
 
-[Releases](../../releases) から `Mouser-x.y.z.zip` をダウンロードして展開し、
-`Mouser.app` をアプリケーションフォルダなどに置いて起動する。
+[Releases](../../releases) から `Mouser-x.y.z.dmg` をダウンロードして開き、
+`Mouser.app` を `Applications` へドラッグする (zip 版もある)。
 
 ad-hoc 署名のため、初回はそのまま開けず Gatekeeper に止められる。
 いずれかの方法で回避する:
 
 ```sh
-xattr -dr com.apple.quarantine Mouser.app
+xattr -dr com.apple.quarantine /Applications/Mouser.app
 ```
 
 または「システム設定 → プライバシーとセキュリティ」下部の「このまま開く」。

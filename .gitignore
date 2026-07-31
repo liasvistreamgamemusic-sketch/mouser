@@ -1,4 +1,5 @@
 build/
 Mouser.app/
 *.zip
+*.dmg
 .DS_Store
